@@ -9,32 +9,47 @@
  *
  *****************************************************************************/
 /**
- * @file <Add File Name> 
+ * @file stats.h
  * @brief <Add Brief Description Here >
  *
  * <Add Extended Description Here>
  *
- * @author <Add FirsName LastName>
+ * @author Reza Yazdani
  * @date <Add date >
  *
  */
 #ifndef __STATS_H__
 #define __STATS_H__
 
-/* Add Your Declarations and Function Comments here */ 
+typedef struct stats{
+    uint8_t *array;
+    uint8_t arrayLength;
+    uint8_t median;
+    uint8_t mean;
+    uint8_t max;
+    uint8_t min;
+} stat;
 
-/**
- * @brief <Add Brief Description of Function Here>
- *
- * <Add Extended Description Here>
- *
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- *
- * @return <Add Return Informaiton here>
- */
+
+void print_statistics(stat ArrayStats);
+
+
+void print_array(uint8_t *arrayPtr, uint8_t arrayLength);
+
+
+void sort_array(uint8_t *arrayPtr, uint8_t arrayLength);
+
+
+uint8_t find_min(uint8_t *arrayPtr, uint8_t arrayLength);
+
+
+uint8_t find_max(uint8_t *arrayPtr, uint8_t arrayLength);
+
+
+uint8_t find_mean(uint8_t *arrayPtr, uint8_t arrayLength);
+
+
+uint8_t find_median(uint8_t *arrayPtr, uint8_t arrayLength);
 
 
 #endif /* __STATS_H__ */
