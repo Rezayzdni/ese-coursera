@@ -1,22 +1,13 @@
 /******************************************************************************
- * Copyright (C) 2021 by @author
+ * Copyright (C) 2023 Reza Yazdani
  *
  * Redistribution, modification or use of this software in source or binary
  * forms is permitted as long as the files maintain this copyright. Users are 
  * permitted to modify this and use it to learn about the field of embedded
- * software. Josh Illes is not liable for any misuse of this material. 
+ * software.
  *
  *****************************************************************************/
-/**
- * @file stats.c
- * @brief Functions for providing statics on an array of numbers, 
- *   and general practice in the "C" language
- *
- *
- * @author Joshua Illes
- * @date 2021-02-09
- *
- */
+
 #ifndef __STATS_H__
 #define __STATS_H__
 
@@ -30,6 +21,9 @@ typedef struct stats{
     uint8_t max;
     uint8_t min;
 } stat;
+
+
+void my_main();
 
 /**
  * @brief Print out all the statistics related to the array
