@@ -30,20 +30,36 @@
 # -ansi -std=STANDARD  Which standard version to use (ex: c89, c99)
 # -v  Verbose output form GCC
 
-include sources.mk
+SHELL=/bin/bash
+
+SRC_DIR := ./src
+OBJ_DIR := ./obj
+INC_DIR := ./include
+
+SOURCES = 	$(SRC_DIR)/main.c \
+			$(SRC_DIR)/memory.c \
+			$(SRC_DIR)/stats.c \
+			$(SRC_DIR)/data.c \
+			$(SRC_DIR)/course1.c 
+
+INCLUDES = -I include/common/
 
 # Platform Overrides
 PLATFORM=HOST
 
+# Compile time switches
+COURSE1=false
+VERBOSE=false
+
+
 # General Flags for all platforms
-GEN_FLAGS = \
-			-Wall \
-			-Werror \
+GEN_FLAGS = -Wall \
 			-g \
 			-O0 \
 			-std=c99
+			# -Werror \
 
-TARGET = c1m2
+TARGET = final_assesment
 
 # Platform Dependant Variables
 ifeq ($(PLATFORM),MSP432)
@@ -55,8 +71,8 @@ ifeq ($(PLATFORM),MSP432)
 				./system_msp432p401r.c \
 				./interrupts_msp432p401r_gcc.c
 	
-	INCLUDES+= 	-I ../include/CMSIS/ \
-				-I ../include/msp432/ \
+	INCLUDES+= 	-I include/CMSIS/ \
+				-I include/msp432/
 
 	# Compiler
 	CC = arm-none-eabi-gcc
@@ -67,7 +83,7 @@ ifeq ($(PLATFORM),MSP432)
 
 	# Linker Flags
 	LINKER_FILE = ../msp432p401r.lds
-	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
+	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE) -lm
 	
 	# Compiler Flags
 	CFLAGS = 	$(GEN_FLAGS) \
@@ -86,7 +102,18 @@ else
 	CFLAGS = $(GEN_FLAGS)
 	CPPFLAGS = -DHOST $(INCLUDES)
 	SIZE = size
+	LDFLAGS = -lm
 
+endif
+
+# IF COURSE1 is defined, add a flag
+ifeq ($(COURSE1), true)
+	CPPFLAGS += -DCOURSE1
+endif
+
+# IF VERBOSE is defined, add a flag
+ifeq ($(VERBOSE), true)
+	CPPFLAGS += -DVERBOSE
 endif
 
 PREP = $(SOURCES:.c=.i)	# Preprocessor Files
@@ -94,7 +121,7 @@ DEPS = $(SOURCES:.c=.d)	# Dependancy Files
 ASMS = $(SOURCES:.c=.asm)	# Assembly Files
 OBJS = $(SOURCES:.c=.o)	# Object files
 
-.PHONY: compile-all build clean
+.PHONY: compile-all build clean run
 
 # Compile all object files and link into a final executable.
 build: $(TARGET).out
@@ -125,4 +152,8 @@ compile-all: $(OBJS)
 clean:
 	# This should remove all compiled objects, preprocessed outputs, assembly outputs, executable files and build output files.
 	@echo Removing all built files
-	rm -f *.out *. *.o *.asm *.i
+	rm -f ${SRC_DIR}/*{.o,.out,.map,.asm,.i} $(TARGET).out
+
+# Build all and run file
+run: $(TARGET).out
+	./$(TARGET).out
